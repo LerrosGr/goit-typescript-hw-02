@@ -1,6 +1,7 @@
+import React from 'react';
 import { Vortex } from 'react-loader-spinner';
 
-export default function Loader() {
+const Loader: React.FC = () => {
   return (
     <>
       <Vortex
@@ -14,4 +15,6 @@ export default function Loader() {
       />
     </>
   );
-}
+};
+
+export default Loader;

@@ -1,25 +1,28 @@
 import { useState, useEffect } from 'react';
 
-import { getImages } from './images-api';
+import { getImages } from '../../images-api';
 
-import SearchBar from './components/SearchBar/SearchBar';
-import ImageGallery from './components/ImageGallery/ImageGalerry';
-import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
-import Loader from './components/Loader/Loader';
-import ErrorMessage from './components/ErrorMessage/ErrorMessage';
-import ImageModal from './components/ImageModal/ImageModal';
+import SearchBar from '../SearchBar/SearchBar';
+import ImageGallery from '../ImageGallery/ImageGalerry';
+import LoadMoreBtn from '../LoadMoreBtn/LoadMoreBtn';
+import Loader from '../Loader/Loader';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import ImageModal from '../ImageModal/ImageModal';
+
+import { Image } from '../../images-api';
+import { ApiResponse } from '../../images-api';
 
 import css from './App.module.css';
 
 export default function App() {
-  const [images, setImages] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState('');
-  const [showBtn, setShowBtn] = useState(false);
+  const [images, setImages] = useState<Image[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [page, setPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedImage, setSelectedImage] = useState<string>('');
+  const [showBtn, setShowBtn] = useState<boolean>(false);
 
   useEffect(() => {
     if (searchQuery.trim() === '') {
@@ -29,7 +32,8 @@ export default function App() {
       try {
         setIsLoading(true);
         setIsError(false);
-        const { results, total_pages } = await getImages(searchQuery, page);
+        const response = await getImages(searchQuery, page);
+        const { results, total_pages } = response as ApiResponse;
         setImages(prevState => [...prevState, ...results]);
         setShowBtn(total_pages !== page);
       } catch (error) {
@@ -41,7 +45,7 @@ export default function App() {
     fetchImages();
   }, [searchQuery, page]);
 
-  const handleSubmit = async topic => {
+  const handleSubmit = async (topic: string) => {
     setSearchQuery(topic);
     setPage(1);
     setImages([]);
@@ -50,24 +54,7 @@ export default function App() {
     setPage(page + 1);
   };
 
-  const customStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      transform: 'translate(-50%, -50%)',
-      maxWidth: '90vw',
-      maxHeight: '90vh',
-      padding: 0,
-      overflow: 'hidden',
-    },
-    overlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    },
-  };
-
-  const openModal = image => {
+  const openModal = (image: string) => {
     setSelectedImage(image);
     setIsOpen(true);
   };
@@ -93,7 +80,6 @@ export default function App() {
         isOpen={isOpen}
         onRequestClose={closeModal}
         image={selectedImage}
-        style={customStyles}
       />
     </div>
   );
