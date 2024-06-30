@@ -1,0 +1,10 @@
+.formWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 50px;
+  gap: 25px;
+}
+.field {
+  width: 200px;
+}

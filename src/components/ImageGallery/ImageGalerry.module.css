@@ -1,0 +1,11 @@
+.mainList {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 50px;
+}
+.listItem {
+  box-sizing: border-box;
+  flex: 0 1 calc(25% - 16px);
+  border: 2px solid #ccc;
+}
